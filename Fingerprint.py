@@ -8,6 +8,7 @@ def pause():
     label.config(text="Script idle")
     root.update()
     while True:
+        time.sleep(0.1)
         if keyboard.is_pressed("strg+e"):
             break
         if keyboard.is_pressed("strg+t"):
