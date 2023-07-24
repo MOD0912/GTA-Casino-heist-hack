@@ -78,7 +78,8 @@ class BlackjackGame(ctk.CTk):
         super().__init__(*args, **kwargs)
         self.width = self.winfo_screenwidth()
         self.height = self.winfo_screenheight()
-        self.playercoins = 500
+        self.playercoins = 300
+        self.all_coins = [500, 250, 100, 50, 20, 10]
 
         # window configuration
         # check if the os is windows, and if not set fullscreen by using
@@ -98,21 +99,56 @@ class BlackjackGame(ctk.CTk):
         self.create_widgets()
         self.coins()
 
-    def coins(self):
+    def calculatecoins(self, coin):
+        '''
+        Calculate what coins the player gets
+        '''
+        print(self.playercoins)
+        print(coin)
+        print()
+        z = 0
+        if coin == self.playercoins:
+            self.listofcoinst.append(1)
+            print(self.listofcoinst)
+            print()
+            return "jaisNone"
         
-        self.coinframe.pack()
+        if coin > self.playercoins:
+            self.listofcoinst.append(0)
+            print(self.listofcoinst)
+            print()
+            return
+        
+        while self.playercoins > coin:
+            self.playercoins -= coin
+            z+=1
+
+        self.listofcoinst.append(z)
+        print(self.listofcoinst)
+        print()
+
+
+    def coins(self):
         """
         handles the coins and bets of the game
-        """
 
+        Coins: 10, 20, 50, 100, 250, 500
+        """
+        playercoins = self.playercoins
+        self.listofcoinst = []
+        self.playercoins
+        for i in self.all_coins:
+            isNone = self.calculatecoins(i)
+            if isNone == "jaisNone":
+                break
+        self.coincanvas.pack(anchor="sw", side="bottom", pady=200, padx=200)
+        self.playercoins = playercoins
+        self.coincanvas.create_image(0, 0, image=ImageTk.PhotoImage(Image.open("cards/CardBack.png")))
 
     def delet(self) -> None:
         """
         resets all values to game start
         """
-
-
-        print(self.keys())
         self.second_card_counter = 0
         self.player_cards_x = int(self.width / 2)
         self.player_cards_y = int(self.height / 1.479)
@@ -195,7 +231,8 @@ class BlackjackGame(ctk.CTk):
             y=self.height - self.height / 10.8,
             anchor="ne"
         )
-        self.coinframe = ctk.CTkFrame(self.canvas1)
+        self.coincanvas = ctk.CTkCanvas(self.canvas1)
+
         self.create_cards(PlayerKind.player)
         self.create_cards(PlayerKind.croupier)
         self.create_cards(PlayerKind.player)
@@ -354,6 +391,7 @@ class BlackjackGame(ctk.CTk):
         self.create_cards(PlayerKind.croupier)
         self.create_cards(PlayerKind.player)
         self.create_cards(PlayerKind.croupier)
+
 
 
 if __name__ == '__main__':
